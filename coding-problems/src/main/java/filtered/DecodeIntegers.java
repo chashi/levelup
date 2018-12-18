@@ -4,28 +4,21 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class DecodeIntegers {
-	private static void writeToSystemIn(String input) throws UnsupportedEncodingException {
-		InputStream testInput = new ByteArrayInputStream(input.getBytes("UTF-8"));
-		System.setIn(testInput);
-	}
 
 	public static void main(String[] args) throws Exception {
 		String input = "11234";
-		writeToSystemIn(input);
+		InputStream testInput = new ByteArrayInputStream(input.getBytes("UTF-8"));
+		System.setIn(testInput);
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String encoded = br.readLine();
 
-		List<String> combinations = new ArrayList<>();
-		if (!(encoded == null || encoded.length() == 0)) {
-			permuteCombinations(encoded, "", combinations);
-		}
+		List<String> combinations = new DecodeIntegers().solve(encoded);
 
 		// output in the format expected by filtered
 		System.out.println(combinations.size());
@@ -35,7 +28,15 @@ public class DecodeIntegers {
 		}
 	}
 
-	private static void permuteCombinations(String input, String combination, List<String> combinations) {
+	public List<String> solve(String encoded) {
+		List<String> combinations = new ArrayList<>();
+		if (!(encoded == null || encoded.length() == 0)) {
+			permuteCombinations(encoded, "", combinations);
+		}
+		return combinations;
+	}
+
+	private void permuteCombinations(String input, String combination, List<String> combinations) {
 		if (input.length() == 0) {
 			combinations.add(combination);
 			return;
@@ -58,7 +59,7 @@ public class DecodeIntegers {
 		}
 	}
 
-	private static String decodeNumber(String number) {
+	private String decodeNumber(String number) {
 		int num = Integer.parseInt(number);
 		num = num + 96;
 		char mapped = (char) num;
